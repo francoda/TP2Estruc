@@ -1,17 +1,23 @@
 import json
 from Consola import Candidato
+import os
 
 def cargar():
     dicc = {}
     for candidato in [e.value for e in Candidato]:
-        dicc[candidato] = json.load(open(str(candidato).replace('@', '').lower() + '.json', 'r'))
+        dicc[candidato] = {}
+        file = open(os.getcwd() + '\\' + str(candidato).replace('@', '').lower() + '.j', 'r')
+        lista = json.load(file)
+        for tweet in lista:
+            dicc[candidato][tweet['id']] = tweet
+        file.close()
     return dicc
 
 def guardar(dicc):
     for candidato, tweets in dicc.items():
-        tweets_olds = []
-        #with open(str(candidato).replace('C:\\Untref\\TP2Estruc' + '@', '').lower() + '.txt', 'r') as file:
-        #    tweets_olds = json.load(file)
-        tweets_olds += tweets
-        with open(open(str(candidato).replace('@', '').lower() + '.j', 'w')) as file:
-            json.dump(tweets_olds, file)
+        file = open(os.getcwd() + '\\' + str(candidato).replace('@', '').lower() + '.j', 'w')
+        lista = []
+        for tweet in tweets.values():
+            lista.append(tweet)
+        json.dump(lista, file)
+        file.close()
