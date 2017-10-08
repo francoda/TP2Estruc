@@ -22,19 +22,19 @@ class Menu():
                 result_type='recent',
                 count=100)
             for tweet in resultados['statuses']:
-                print(ascii(tweet['text']))
                 for candidato in [e.value for e in Candidato]:
                     if candidato in tweet['text']:
                         try:
                             self.dicc[candidato][tweet['id']] = tweet
                         except KeyError:
                             self.dicc[candidato] = {tweet['id']: tweet}
-            Persistencia.guardar(self.dicc)
             #Imprimo resultados
+            self.limpiar()
             self.resumen()
-            self.s.enter(20, 1, self.Ciclo, (sc,))
         except Exception as ex:
-            lala = input(str(ex))
+            Persistencia.guardar(self.dicc)
+            input(str(ex) + '\n Preciona Enter para continuar...')
+        self.s.enter(20, 1, self.Ciclo, (sc,))
 
     def limpiar(self):
         os.system('cls' if os.name=='nt' else 'clear')
