@@ -6,10 +6,10 @@ def cargar():
     dicc = {e.value:{} for e in Candidato}
     for candidato in [e.value for e in Candidato]:
         try:
-            file = open(os.getcwd() + '\\' + str(candidato).replace('@', '').lower() + '.j', 'r')
+            file = open(os.getcwd() + '\\Base\\' + str(candidato).replace('@', '').lower() + '.j', 'r')
             lista = json.load(file)
             for tweet in lista:
-                dicc[candidato][tweet['id']] = tweet
+                dicc[candidato][tweet['Id']] = tweet
             file.close()
         except FileNotFoundError:
             dicc[candidato] = {}
@@ -17,7 +17,7 @@ def cargar():
 
 def guardar(dicc):
     for candidato, tweets in dicc.items():
-        file = open(os.getcwd() + '\\' + str(candidato).replace('@', '').lower() + '.j', 'w')
+        file = open(os.getcwd() + '\\Base\\' + str(candidato).replace('@', '').lower() + '.j', 'w')
         lista = []
         for tweet in tweets.values():
             lista.append(tweet)
@@ -28,7 +28,7 @@ def cargarEstadisticas():
     try:
         last_id = 0
         fist_id = 0
-        file = open(os.getcwd() + '\\Estadisticas.txt', 'r')
+        file = open(os.getcwd() + '\\Base\\Estadisticas.txt', 'r')
         for line in file.readlines():
             if 'last_id' in line:
                 last_id = int(line.split(":",1)[1])
@@ -40,6 +40,6 @@ def cargarEstadisticas():
         return 0, 0
 
 def guardarEstadisticas(resumen):
-    file = open(os.getcwd() + '\\Estadisticas.txt', 'w')
+    file = open(os.getcwd() + '\\Base\\Estadisticas.txt', 'w')
     file.writelines(resumen)
     file.close()

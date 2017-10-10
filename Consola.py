@@ -39,9 +39,9 @@ class Menu():
                         tweets.append(ascii(tweet['text']))
                         diccContador[candidato] += 1
                         try:
-                            self.dicc[candidato][tweet['id']] = tweet
+                            self.dicc[candidato][tweet['id']] = {'Id':tweet['id'], 'Texto':tweet['text'], 'Fecha':tweet['created_at']}
                         except KeyError:
-                            self.dicc[candidato] = {tweet['id']: tweet}
+                            self.dicc[candidato] = {tweet['id']: {'Id':tweet['id'], 'Texto':tweet['text'], 'Fecha':tweet['created_at']}}
             #Imprimo resultados
             self.limpiar()
             self.resumen(diccContador)
