@@ -8,14 +8,14 @@ import Estadisticas
 class Menu():
 
     def __init__(self):
-        #Estadisticas.leer_tweets() #Para probarlo solo, descomentar esta línea y comentar el resto del constructor
-        self.tw = Twitter(auth=OAuth(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET))
-        self.dicc = Persistencia.cargar()
-        self.last_id, self.fist_id = Persistencia.cargarEstadisticas()
-        self.resumen({e.value:0 for e in Candidato})
-        self.s = sched.scheduler(time.time, time.sleep)
-        self.s.enter(15, 1, self.Ciclo, (self.s,))
-        self.s.run()
+        Estadisticas.puntuar_tweets(Estadisticas.leer_tweets()) #Para probarlo solo, descomentar esta línea y comentar el resto del constructor
+        #self.tw = Twitter(auth=OAuth(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET))
+        #self.dicc = Persistencia.cargar()
+        #self.last_id, self.fist_id = Persistencia.cargarEstadisticas()
+        #self.resumen({e.value:0 for e in Candidato})
+        #self.s = sched.scheduler(time.time, time.sleep)
+        #self.s.enter(15, 1, self.Ciclo, (self.s,))
+        #self.s.run()
 
     def Ciclo(self, sc):
         try:

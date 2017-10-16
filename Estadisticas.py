@@ -1,6 +1,8 @@
 import json
 import os
 import re
+import csv
+import Persistencia
 
 STOP_WORDS = ['URL','USER']
 
@@ -27,6 +29,7 @@ def leer_tweets():
             apariciones_palabras[candidato] = {}
     return apariciones_palabras
 
+
 def limpiar_texto(texto):
     texto = re.sub(r'([A-Z]+)', lambda match: r'{}'.format(match.group(1).lower()), texto) #Paso a minúsculas
     texto = re.sub(r'[^a-z@áéíóú\s]', '', texto) #Borro caracteres especiales
@@ -40,4 +43,28 @@ def limpiar_texto(texto):
     texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) #Borro links (si están pegados a una palabra a su izquierda también)
     texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) #Borro emails
     return texto
+
+
+def puntuar_tweets(apariciones_palabras = {}):
+
+    diccionario_afectos = Persistencia.generar_diccionario_afectos()
+    puntaje_candidato = 0
+    diccionario_puntajes = {}
+
+    for candidato, palabras in apariciones_palabras.items(): #Para cada candidato y cada palabra asociada al mismo
+        for palabra, cantidad in palabras.items():
+            if palabra in diccionario_afectos.keys():
+                puntaje_candidato += diccionario_afectos[palabra]*cantidad
+        diccionario_puntajes[candidato] = puntaje_candidato
+            #Se puede agregar un else que guarde aquellas palabras que no aparecieron en el diccionario de afectos, de manera de mantener un control interno.
+
+    print(diccionario_puntajes)
+
+
+
+
+
+
+
+
 
