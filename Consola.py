@@ -3,10 +3,12 @@ from Documentacion.config import *
 from datetime import date
 import sched, time, os
 import Persistencia
+import Estadisticas
 
 class Menu():
 
     def __init__(self):
+        #Estadisticas.leer_tweets() #Para probarlo solo, descomentar esta línea y comentar el resto del constructor
         self.tw = Twitter(auth=OAuth(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET))
         self.dicc = Persistencia.cargar()
         self.last_id, self.fist_id = Persistencia.cargarEstadisticas()
@@ -75,7 +77,6 @@ class Candidato(Enum):
     GLADYS_GONZALEZ = '@gladys_gonzalez'
     STOLBIZER = '@Stolbizer'
     ANDREADATRI = '@andreadatri'
-    #FLORENCIACASAMIQUELA =
 
 if __name__ == '__main__':
     Menu()
