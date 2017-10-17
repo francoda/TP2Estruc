@@ -12,6 +12,7 @@ class Menu():
         for candidato, puntaje in dicc.items():
             print(candidato, ': ', '%.2f' % puntaje)
         input('Precione Enter para iniciar...')
+        self.limpiar()
         self.tw = Twitter(auth=OAuth(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET))#Inicializo twitter con las credenciales
         self.dicc = Persistencia.cargar()#Cargo los tweets previamente guardamos
         self.last_id, self.fist_id = Persistencia.cargarEstadisticas()#Cargo ids para luego utlizar
@@ -49,6 +50,8 @@ class Menu():
                                                                       'Fecha': tweet['created_at']}}
                 if self.fist_id == 0 or len(resultados['statuses'])<100:
                     break  # Si no tengo primer Id o si ya no sobrepaso la cantidad de tweets obtenidos por consulta
+                self.limpiar()
+                print(self.resumen(diccContador))
             except TwitterError:
                 if not limite_alcanzado:#Evito que se muestre mas de una vez
                     print('Limite excedido')
