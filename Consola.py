@@ -1,5 +1,5 @@
-from enum import Enum
 from Documentacion.config import *
+from Modelos import *
 import threading, os
 import Persistencia
 import Estadisticas
@@ -7,14 +7,16 @@ import Estadisticas
 class Menu():
 
     def __init__(self):
-        Estadisticas.puntuar_tweets(
-            Estadisticas.leer_tweets())  # Para probarlo solo, descomentar esta línea y comentar el resto del constructor
+        dicc = Estadisticas.leer_tweets()
+        dicc = Estadisticas.puntuar_tweets(dicc)
+        for candidato, puntaje in dicc.items():
+            print(candidato, ': ', '%.2f' % puntaje)
+        input('Precione Enter para iniciar...')
         self.tw = Twitter(auth=OAuth(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET))#Inicializo twitter con las credenciales
         self.dicc = Persistencia.cargar()#Cargo los tweets previamente guardamos
         self.last_id, self.fist_id = Persistencia.cargarEstadisticas()#Cargo ids para luego utlizar
         print(self.resumen({e.value:0 for e in Candidato}))#Imprimo un resumen de los previamente guardado
         self.Ciclo()#Metodo que se llama cada 15seg
-        Estadisticas.puntuar_tweets(Estadisticas.leer_tweets())  # Para probarlo solo, descomentar esta línea y comentar el resto del constructor
 
     def Ciclo(self):
         limite_alcanzado = False
@@ -31,7 +33,7 @@ class Menu():
                     max_id=current_id,
                     since_id=self.fist_id
                 )
-                limite_alcanzado = False
+                limite_alcanzado = False #Reseteo el flag de limite de API
                 for tweet in resultados['statuses']:
                     current_id = tweet['id']#Guardo el id que estoy procesando
                     if self.last_id == 0:#Si no tengo un last_id es que recien empece
@@ -46,7 +48,7 @@ class Menu():
                                 self.dicc[candidato] = {tweet['id']: {'Id': tweet['id'], 'Texto': tweet['text'],
                                                                       'Fecha': tweet['created_at']}}
                 if self.fist_id == 0 or len(resultados['statuses'])<100:
-                    break  # Si no tengo primer Id
+                    break  # Si no tengo primer Id o si ya no sobrepaso la cantidad de tweets obtenidos por consulta
             except TwitterError:
                 if not limite_alcanzado:#Evito que se muestre mas de una vez
                     print('Limite excedido')
@@ -72,17 +74,6 @@ class Menu():
 
     def ids(self):
         return 'last_id:' + str(self.last_id) + '\nfist_id:' + str(self.fist_id)
-
-class Candidato(Enum):
-    CFKARGENTINA = '@CFKArgentina'
-    ESTEBANBULLRICH = '@estebanbullrich'
-    SERGIOMASSA = '@SergioMassa'
-    RANDAZZOF  = '@RandazzoF'
-    NESTORPITROLA  = '@nestorpitrola'
-    JORGETAIANA = '@JorgeTaiana'
-    GLADYS_GONZALEZ = '@gladys_gonzalez'
-    STOLBIZER = '@Stolbizer'
-    ANDREADATRI = '@andreadatri'
 
 if __name__ == '__main__':
     Menu()

@@ -1,11 +1,10 @@
 import json
 import os
 import re
-import csv
 import Persistencia
+from Modelos import *
 
 def leer_tweets():
-    from Consola import Candidato #Nose por qué no funciona si lo pongo arriba con el resto de los import
     STOP_WORDS = Persistencia.cargar_STOP_WORDS()
     apariciones_palabras = {e.value: {} for e in Candidato}
     for candidato in [e.value for e in Candidato]:
@@ -22,12 +21,11 @@ def leer_tweets():
                         else:
                             apariciones_palabras[candidato][p] += 1
             file.close()
-            print(candidato + ':')
-            print(apariciones_palabras[candidato])
+            #print(candidato + ':')
+            #print(apariciones_palabras[candidato])
         except FileNotFoundError:
             apariciones_palabras[candidato] = {}
     return apariciones_palabras
-
 
 def limpiar_texto(texto):
     texto = re.sub(r'([A-Z]+)', lambda match: r'{}'.format(match.group(1).lower()), texto) #Paso a minúsculas
@@ -38,7 +36,6 @@ def limpiar_texto(texto):
     texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) #Borro links (si están pegados a una palabra a su izquierda también)
     texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) #Borro emails
     return texto
-
 
 def puntuar_tweets(apariciones_palabras = {}):
     diccionario_afectos = Persistencia.generar_diccionario_afectos()
@@ -51,10 +48,9 @@ def puntuar_tweets(apariciones_palabras = {}):
                 puntaje_candidato += diccionario_afectos[palabra]*cantidad
         diccionario_puntajes[candidato] = puntaje_candidato
             #Se puede agregar un else que guarde aquellas palabras que no aparecieron en el diccionario de afectos, de manera de mantener un control interno.
-
-    print('Puntajes:')
-    print(diccionario_puntajes)
-
+    #print('Puntajes:')
+    #print(diccionario_puntajes)
+    return diccionario_puntajes
 
 def quitar_acentos(texto):
     texto = re.sub(r'[á]', 'a', texto)
