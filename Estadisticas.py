@@ -4,10 +4,9 @@ import re
 import csv
 import Persistencia
 
-STOP_WORDS = ['URL','USER']
-
 def leer_tweets():
     from Consola import Candidato #Nose por qué no funciona si lo pongo arriba con el resto de los import
+    STOP_WORDS = Persistencia.cargar_STOP_WORDS()
     apariciones_palabras = {e.value: {} for e in Candidato}
     for candidato in [e.value for e in Candidato]:
         try:
@@ -35,18 +34,13 @@ def limpiar_texto(texto):
     texto = re.sub(r'[^a-z@áéíóú\s]', '', texto) #Borro caracteres especiales
     texto = re.sub(r'\B@[\S]+', 'USER', texto) #Borro usuarios
     #Saco acentos
-    texto = re.sub(r'[á]', 'a', texto)
-    texto = re.sub(r'[é]', 'e', texto)
-    texto = re.sub(r'[í]', 'i', texto)
-    texto = re.sub(r'[ó]', 'o', texto)
-    texto = re.sub(r'[ú]', 'u', texto)
+    texto = Persistencia.quitar_acentos(texto)
     texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) #Borro links (si están pegados a una palabra a su izquierda también)
     texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) #Borro emails
     return texto
 
 
 def puntuar_tweets(apariciones_palabras = {}):
-
     diccionario_afectos = Persistencia.generar_diccionario_afectos()
     puntaje_candidato = 0
     diccionario_puntajes = {}
@@ -58,13 +52,14 @@ def puntuar_tweets(apariciones_palabras = {}):
         diccionario_puntajes[candidato] = puntaje_candidato
             #Se puede agregar un else que guarde aquellas palabras que no aparecieron en el diccionario de afectos, de manera de mantener un control interno.
 
+    print('Puntajes:')
     print(diccionario_puntajes)
 
 
-
-
-
-
-
-
-
+def quitar_acentos(texto):
+    texto = re.sub(r'[á]', 'a', texto)
+    texto = re.sub(r'[é]', 'e', texto)
+    texto = re.sub(r'[í]', 'i', texto)
+    texto = re.sub(r'[ó]', 'o', texto)
+    texto = re.sub(r'[ú]', 'u', texto)
+    return texto
