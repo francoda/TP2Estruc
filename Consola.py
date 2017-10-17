@@ -2,10 +2,13 @@ from enum import Enum
 from Documentacion.config import *
 import threading, os
 import Persistencia
+import Estadisticas
 
 class Menu():
 
     def __init__(self):
+        Estadisticas.puntuar_tweets(
+            Estadisticas.leer_tweets())  # Para probarlo solo, descomentar esta línea y comentar el resto del constructor
         self.tw = Twitter(auth=OAuth(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET))#Inicializo twitter con las credenciales
         self.dicc = Persistencia.cargar()#Cargo los tweets previamente guardamos
         self.last_id, self.fist_id = Persistencia.cargarEstadisticas()#Cargo ids para luego utlizar
@@ -79,7 +82,6 @@ class Candidato(Enum):
     GLADYS_GONZALEZ = '@gladys_gonzalez'
     STOLBIZER = '@Stolbizer'
     ANDREADATRI = '@andreadatri'
-    #FLORENCIACASAMIQUELA =
 
 if __name__ == '__main__':
     Menu()
