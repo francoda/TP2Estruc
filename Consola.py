@@ -14,6 +14,7 @@ class Menu():
         self.last_id, self.fist_id = Persistencia.cargarEstadisticas()#Cargo ids para luego utlizar
         print(self.resumen({e.value:0 for e in Candidato}))#Imprimo un resumen de los previamente guardado
         self.Ciclo()#Metodo que se llama cada 15seg
+        Estadisticas.puntuar_tweets(Estadisticas.leer_tweets())  # Para probarlo solo, descomentar esta línea y comentar el resto del constructor
 
     def Ciclo(self):
         limite_alcanzado = False
