@@ -48,14 +48,16 @@ class Menu():
                             except KeyError:
                                 self.dicc[candidato] = {tweet['id']: {'Id': tweet['id'], 'Texto': tweet['text'],
                                                                       'Fecha': tweet['created_at']}}
-                if self.fist_id == 0 or len(resultados['statuses'])<100:
+                if self.fist_id == 0 or len(resultados['statuses'])<=1:
                     break  # Si no tengo primer Id o si ya no sobrepaso la cantidad de tweets obtenidos por consulta
                 self.limpiar()
                 print(self.resumen(diccContador))
-            except TwitterError:
+            except (TwitterError, TimeoutError) as ex:
                 if not limite_alcanzado:#Evito que se muestre mas de una vez
-                    print('Limite excedido')
+                    print('Error de conexión' if ex is TimeoutError else 'Limite excedido')
                     limite_alcanzado = not limite_alcanzado
+            except:
+                print('Error inesperado')
         self.limpiar()
         resumen = self.resumen(diccContador)
         print(resumen)

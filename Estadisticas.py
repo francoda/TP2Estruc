@@ -39,10 +39,10 @@ def limpiar_texto(texto):
 
 def puntuar_tweets(apariciones_palabras = {}):
     diccionario_afectos = Persistencia.generar_diccionario_afectos()
-    puntaje_candidato = 0
     diccionario_puntajes = {}
 
     for candidato, palabras in apariciones_palabras.items(): #Para cada candidato y cada palabra asociada al mismo
+        puntaje_candidato = 0
         for palabra, cantidad in palabras.items():
             if palabra in diccionario_afectos.keys():
                 puntaje_candidato += diccionario_afectos[palabra]*cantidad
