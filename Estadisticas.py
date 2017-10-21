@@ -43,13 +43,12 @@ def puntuar_tweets(apariciones_palabras = {}):
 
     for candidato, palabras in apariciones_palabras.items(): #Para cada candidato y cada palabra asociada al mismo
         puntaje_candidato = 0
+        cantidad_palabras_puntaje = 0
         for palabra, cantidad in palabras.items():
             if palabra in diccionario_afectos.keys():
                 puntaje_candidato += diccionario_afectos[palabra]*cantidad
-        diccionario_puntajes[candidato] = puntaje_candidato
-            #Se puede agregar un else que guarde aquellas palabras que no aparecieron en el diccionario de afectos, de manera de mantener un control interno.
-    #print('Puntajes:')
-    #print(diccionario_puntajes)
+                cantidad_palabras_puntaje += cantidad
+        diccionario_puntajes[candidato] = puntaje_candidato/cantidad_palabras_puntaje
     return diccionario_puntajes
 
 def quitar_acentos(texto):
