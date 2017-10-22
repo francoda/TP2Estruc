@@ -4,7 +4,7 @@ from Modelos import *
 
 while not os.path.isfile(os.getcwd() + '\\Documentacion\\config.py'):
     input('Por favor, coloque el archivo "config.py" dentro de la carpeta Documentacion.\n'
-          'Precione Enter cuando esté listo...')
+          'Presione Enter cuando esté listo...')
 from Documentacion.config import *
 
 class Colector():

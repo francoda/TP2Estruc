@@ -50,7 +50,7 @@ def generar_diccionario_afectos():
     diccionario_afectos = {}
     while not os.path.isfile(os.getcwd() + '\\Documentacion\\Diccionario_Afectos.csv'):
         input('Por favor, coloque el archivo "Diccionario_Afectos.csv" dentro de la carpeta Documentacion.\n'
-              'Precione Enter cuando esté listo...')
+              'Presione Enter cuando esté listo...')
     file = open('Documentacion\\Diccionario_Afectos.csv', 'r')
     reader = csv.reader(file, delimiter=';')
 
@@ -67,7 +67,7 @@ def cargar_STOP_WORDS():
         STOP_WORDS = []
         while not os.path.isfile(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt'):
             input('Por favor, coloque el archivo "STOP_WORDS.txt" dentro de la carpeta Documentacion.\n'
-                  'Precione Enter cuando esté listo...')
+                  'Presione Enter cuando esté listo...')
         file = open(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt', 'r')
         for line in file.readlines():
             STOP_WORDS.append(sbEsp.stem(line)) # Guarda la palabra normalizada

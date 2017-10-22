@@ -31,7 +31,7 @@ class Menu():
                     for candidato, puntaje in Estadisticas.puntuar_tweets():
                         print('%.2f' % puntaje, '-', candidatos_nombre_apellido[candidato])
                 if opcion_estadistica != Menu_TipoEstadistica.SALIR:
-                    input('Precione Enter para volver al menú...')
+                    input('Presione Enter para volver al menú...')
             elif opcion_menu == Menu_Principal.SALIR:
                 break
             else:
@@ -41,7 +41,7 @@ class Menu():
                             self.limpiar()
                             print(resumen)
                         if opcion_menu == Menu_Principal.BUSQUEDA_UNICA:
-                            input('Precione Enter para volver al menú...')
+                            input('Presione Enter para volver al menú...')
                             break
                         else:
                             time.sleep(15)
