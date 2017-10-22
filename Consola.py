@@ -1,9 +1,7 @@
 import os, time
-import Persistencia
 import Estadisticas
 from Colector import *
 from Modelos import *
-from Documentacion.config import *
 
 class Menu():
 
