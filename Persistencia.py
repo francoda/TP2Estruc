@@ -1,8 +1,5 @@
-import json
+import json, os, csv, re
 from Consola import Candidato
-import os
-import csv
-import re
 from nltk.stem.snowball import SnowballStemmer
 
 sbEsp = SnowballStemmer('spanish')
@@ -29,11 +26,11 @@ def guardar(dicc):
         json.dump(lista, file)
         file.close()
 
-def cargarEstadisticas():
+def cargarBusquedaLog():
     try:
         last_id = 0
         fist_id = 0
-        file = open(os.getcwd() + '\\Base\\Estadisticas.txt', 'r')
+        file = open(os.getcwd() + '\\Base\\UltimaBusquedaLog.txt', 'r')
         for line in file.readlines():
             if 'last_id' in line:
                 last_id = int(line.split(":",1)[1])
@@ -44,8 +41,8 @@ def cargarEstadisticas():
     except FileNotFoundError:
         return 0, 0
 
-def guardarEstadisticas(resumen):
-    file = open(os.getcwd() + '\\Base\\Estadisticas.txt', 'w')
+def guardarBusquedaLog(resumen):
+    file = open(os.getcwd() + '\\Base\\UltimaBusquedaLog.txt', 'w')
     file.writelines(resumen)
     file.close()
 

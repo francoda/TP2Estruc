@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntEnum
 
 class Candidato(Enum):
     CFKARGENTINA = '@CFKArgentina'
@@ -10,3 +10,10 @@ class Candidato(Enum):
     GLADYS_GONZALEZ = '@gladys_gonzalez'
     STOLBIZER = '@Stolbizer'
     ANDREADATRI = '@andreadatri'
+
+class Menu_Principal(IntEnum):
+    SALIR = 0
+    ESTADISTICAS = 1
+    BUSQUEDA_UNICA = 2
+    BUSQUEDA_AUTOMATICA = 3
+

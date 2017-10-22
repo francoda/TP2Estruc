@@ -1,12 +1,28 @@
-import json
-import os
-import re
+import json, os, re
 import Persistencia
 from Modelos import *
 from nltk.stem.snowball import SnowballStemmer
 
 sbEsp = SnowballStemmer('spanish')
 LONGITUD_MINIMA = 3
+
+def puntuar_tweets():
+    apariciones_palabras = leer_tweets()
+    diccionario_afectos = Persistencia.generar_diccionario_afectos()
+    diccionario_puntajes = {}
+
+    for candidato, palabras in apariciones_palabras.items(): #Para cada candidato y cada palabra asociada al mismo
+        puntaje_candidato = 0
+        cantidad_palabras_puntaje = 0
+        for palabra, cantidad in palabras.items():
+            if palabra in diccionario_afectos.keys():
+                puntaje_candidato += diccionario_afectos[palabra]*cantidad
+                cantidad_palabras_puntaje += cantidad
+        if cantidad_palabras_puntaje > 0:
+            diccionario_puntajes[candidato] = puntaje_candidato/cantidad_palabras_puntaje
+        else:
+            diccionario_puntajes[candidato] = 0
+    return diccionario_puntajes
 
 def leer_tweets():
     STOP_WORDS = Persistencia.cargar_STOP_WORDS()
@@ -35,33 +51,11 @@ def limpiar_texto(texto):
     texto = re.sub(r'([A-Z]+)', lambda match: r'{}'.format(match.group(1).lower()), texto) #Paso a minúsculas
     texto = re.sub(r'[^a-z@áéíóú\s]', '', texto) #Borro caracteres especiales
     texto = re.sub(r'\B@[\S]+', 'USER', texto) #Borro usuarios
-    #Saco acentos
-    texto = quitar_acentos(texto)
-    texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) #Borro links (si están pegados a una palabra a su izquierda también)
-    texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) #Borro emails
-    return texto
-
-def puntuar_tweets(apariciones_palabras = {}):
-    diccionario_afectos = Persistencia.generar_diccionario_afectos()
-    diccionario_puntajes = {}
-
-    for candidato, palabras in apariciones_palabras.items(): #Para cada candidato y cada palabra asociada al mismo
-        puntaje_candidato = 0
-        cantidad_palabras_puntaje = 0
-        for palabra, cantidad in palabras.items():
-            if palabra in diccionario_afectos.keys():
-                puntaje_candidato += diccionario_afectos[palabra]*cantidad
-                cantidad_palabras_puntaje += cantidad
-        if cantidad_palabras_puntaje > 0:
-            diccionario_puntajes[candidato] = puntaje_candidato/cantidad_palabras_puntaje
-        else:
-            diccionario_puntajes[candidato] = 0
-    return diccionario_puntajes
-
-def quitar_acentos(texto):
-    texto = re.sub(r'[á]', 'a', texto)
+    texto = re.sub(r'[á]', 'a', texto) #Quitar acentos
     texto = re.sub(r'[é]', 'e', texto)
     texto = re.sub(r'[í]', 'i', texto)
     texto = re.sub(r'[ó]', 'o', texto)
     texto = re.sub(r'[ú]', 'u', texto)
+    texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) #Borro links (si están pegados a una palabra a su izquierda también)
+    texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) #Borro emails
     return texto
