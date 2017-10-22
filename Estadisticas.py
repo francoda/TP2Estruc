@@ -17,7 +17,7 @@ def puntuar_tweets():
     diccionario_afectos = Persistencia.generar_diccionario_afectos()
     diccionario_puntajes = []
 
-    for candidato, palabras in apariciones_palabras.items(): #Para cada candidato y cada palabra asociada al mismo
+    for candidato, palabras in apariciones_palabras.items(): # Para cada candidato y cada palabra asociada al mismo
         puntaje_candidato = 0
         cantidad_palabras_puntaje = 0
         for palabra, cantidad in palabras.items():
@@ -54,14 +54,14 @@ def leer_tweets():
     return apariciones_palabras
 
 def limpiar_texto(texto):
-    texto = re.sub(r'([A-Z]+)', lambda match: r'{}'.format(match.group(1).lower()), texto) #Paso a minúsculas
-    texto = re.sub(r'[^a-z@áéíóú\s]', '', texto) #Borro caracteres especiales
-    texto = re.sub(r'\B@[\S]+', 'USER', texto) #Borro usuarios
-    texto = re.sub(r'[á]', 'a', texto) #Quitar acentos
+    texto = re.sub(r'([A-Z]+)', lambda match: r'{}'.format(match.group(1).lower()), texto) # Paso a minúsculas
+    texto = re.sub(r'[^a-z@áéíóú\s]', '', texto) # Borro caracteres especiales
+    texto = re.sub(r'\B@[\S]+', 'USER', texto) # Borro usuarios
+    texto = re.sub(r'[á]', 'a', texto) # Saco acentos
     texto = re.sub(r'[é]', 'e', texto)
     texto = re.sub(r'[í]', 'i', texto)
     texto = re.sub(r'[ó]', 'o', texto)
     texto = re.sub(r'[ú]', 'u', texto)
-    texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) #Borro links (si están pegados a una palabra a su izquierda también)
-    texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) #Borro emails
+    texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) # Borro links (si están pegados a una palabra a su izquierda también)
+    texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) # Borro emails
     return texto

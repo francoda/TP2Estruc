@@ -50,15 +50,15 @@ def generar_diccionario_afectos():
     diccionario_afectos = {}
     while not os.path.isfile(os.getcwd() + '\\Documentacion\\Diccionario_Afectos.csv'):
         input('Por favor, coloque el archivo "Diccionario_Afectos.csv" dentro de la carpeta Documentacion.\n'
-              'Precione Enter cuando este listo...')
+              'Precione Enter cuando esté listo...')
     file = open('Documentacion\\Diccionario_Afectos.csv', 'r')
     reader = csv.reader(file, delimiter=';')
 
     for renglon in reader:
         if renglon[0][len(renglon[0]) - 1] != 'N':
-            palabra = re.sub(r'(\_\w)?', '', renglon[0]) #Usa una expresión regular para identificar las palabras que finalicen con "_ + una letra cualquiera" y lo reemplaza por nada, es decir, lo corta.
-            palabra = sbEsp.stem(palabra) #Normaliza la palabra
-            diccionario_afectos[palabra] = float(renglon[1]) #int(puntaje) #Genera un diccionario cuya clave es una palabra normalizada y su valor representa el "score" de dicha palabra.
+            palabra = re.sub(r'(\_\w)?', '', renglon[0]) # Usa una expresión regular para identificar las palabras que finalicen con "_ + una letra cualquiera" y lo reemplaza por nada, es decir, lo corta.
+            palabra = sbEsp.stem(palabra) # Normaliza la palabra
+            diccionario_afectos[palabra] = float(renglon[1]) # int(puntaje) #Genera un diccionario cuya clave es una palabra normalizada y su valor representa el "score" de dicha palabra.
 
     return diccionario_afectos
 
@@ -67,10 +67,10 @@ def cargar_STOP_WORDS():
         STOP_WORDS = []
         while not os.path.isfile(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt'):
             input('Por favor, coloque el archivo "STOP_WORDS.txt" dentro de la carpeta Documentacion.\n'
-                  'Precione Enter cuando este listo...')
+                  'Precione Enter cuando esté listo...')
         file = open(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt', 'r')
         for line in file.readlines():
-            STOP_WORDS.append(sbEsp.stem(line)) #Guarda la palabra normalizada
+            STOP_WORDS.append(sbEsp.stem(line)) # Guarda la palabra normalizada
         file.close()
         return STOP_WORDS
     except FileNotFoundError:

@@ -4,7 +4,7 @@ from Modelos import *
 
 while not os.path.isfile(os.getcwd() + '\\Documentacion\\config.py'):
     input('Por favor, coloque el archivo "config.py" dentro de la carpeta Documentacion.\n'
-          'Precione Enter cuando este listo...')
+          'Precione Enter cuando esté listo...')
 from Documentacion.config import *
 
 class Colector():
@@ -37,11 +37,11 @@ class Colector():
                     max_id=current_id,
                     since_id=Colector.fist_id
                 )
-                limite_alcanzado = False #Reseteo el flag de limite de API
+                limite_alcanzado = False # Reseteo el flag de limite de API
                 for tweet in resultados['statuses']:
-                    current_id = tweet['id']#Guardo el id que estoy procesando
-                    if Colector.last_id == 0:#Si no tengo un last_id es que recien empece
-                        Colector.last_id = tweet['id']#Lo guardo como el primero del ciclo
+                    current_id = tweet['id'] # Guardo el id que estoy procesando
+                    if Colector.last_id == 0: # Si no tengo un last_id es que recien empece
+                        Colector.last_id = tweet['id'] # Lo guardo como el primero del ciclo
                     for candidato in [e.value for e in Candidato]:
                         if candidato in tweet['text'] and tweet['id'] not in Colector.dicc[candidato]:
                             diccContador[candidato] += 1
@@ -55,7 +55,7 @@ class Colector():
                     break  # Si no tengo primer Id o si ya no sobrepaso la cantidad de tweets obtenidos por consulta
                 yield Colector.getResumen(diccContador)
             except (TwitterError, TimeoutError) as ex:
-                if not limite_alcanzado:#Evito que se muestre mas de una vez
+                if not limite_alcanzado: # Evito que se muestre mas de una vez
                     yield Colector.getResumen(diccContador) + '\nError de conexión' if ex is TimeoutError else '\nLimite excedido'
                     limite_alcanzado = not limite_alcanzado
             except (KeyboardInterrupt):
@@ -71,7 +71,7 @@ class Colector():
                 Persistencia.guardar(Colector.dicc)
                 break
             except (KeyboardInterrupt):
-                print('Aguarde, guardando progreso.')
+                print('Se está guardando el proceso, aguarde por favor...')
         print('Proceso Guardado')
 
     @staticmethod

@@ -8,31 +8,31 @@ class Menu():
     def __init__(self):
         while True:
             self.limpiar()
-            self.opcion_menu = self.leer_entero('Menú Principal: \n'
+            opcion_menu = self.leer_entero('Menú Principal: \n'
                                                    '1 - Estadísticas \n'
                                                    '2 - Búsqueda Única \n'
                                                    '3 - Búsqueda Automática \n'
                                                    '0 - Salir \n')
-            if self.opcion_menu == Menu_Principal.ESTADISTICAS:
+            if opcion_menu == Menu_Principal.ESTADISTICAS:
                 self.limpiar()
-                self.opcion_estadistica = self.leer_entero('Estadísticas: \n'
-                                                   '1 - Cantidad \n'
-                                                   '2 - Promedio \n'
-                                                   '0 - Salir \n')
-                if self.opcion_estadistica != Menu_TipoEstadistica.SALIR:
+                opcion_estadistica = self.leer_entero('Estadísticas: \n'
+                                                   '1 - Cantidad de Tweets \n'
+                                                   '2 - Promedio de Afectos \n'
+                                                   '0 - Volver \n')
+                if opcion_estadistica != Menu_TipoEstadistica.SALIR:
                     print('Los datos se están procesando, aguarde por favor...')
-                if self.opcion_estadistica == Menu_TipoEstadistica.CANTIDAD:
+                if opcion_estadistica == Menu_TipoEstadistica.CANTIDAD:
                     max_len = 0
                     for candidato, cantidad in Estadisticas.cantidad_tweets():
                         if max_len == 0:
                             max_len = len(str(cantidad))
                         print(str(cantidad).rjust(max_len), '-', candidatos_nombre_apellido[candidato])
-                elif self.opcion_estadistica == Menu_TipoEstadistica.PROMEDIO:
+                elif opcion_estadistica == Menu_TipoEstadistica.PROMEDIO:
                     for candidato, puntaje in Estadisticas.puntuar_tweets():
                         print('%.2f' % puntaje, '-', candidatos_nombre_apellido[candidato])
-                if self.opcion_estadistica != Menu_TipoEstadistica.SALIR:
+                if opcion_estadistica != Menu_TipoEstadistica.SALIR:
                     input('Precione Enter para volver al menú...')
-            elif self.opcion_menu == Menu_Principal.SALIR:
+            elif opcion_menu == Menu_Principal.SALIR:
                 break
             else:
                 while True:
@@ -40,7 +40,7 @@ class Menu():
                         for resumen in Colector.Buscar():
                             self.limpiar()
                             print(resumen)
-                        if self.opcion_menu == Menu_Principal.BUSQUEDA_UNICA:
+                        if opcion_menu == Menu_Principal.BUSQUEDA_UNICA:
                             input('Precione Enter para volver al menú...')
                             break
                         else:
