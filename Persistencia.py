@@ -1,9 +1,11 @@
 import json
 from Consola import Candidato
-from Estadisticas import quitar_acentos
 import os
 import csv
 import re
+from nltk.stem.snowball import SnowballStemmer
+
+sbEsp = SnowballStemmer('spanish')
 
 def cargar():
     dicc = {e.value:{} for e in Candidato}
@@ -55,10 +57,8 @@ def generar_diccionario_afectos():
     for renglon in reader:
         if renglon[0][len(renglon[0]) - 1] != 'N':
             palabra = re.sub(r'(\_\w)?', '', renglon[0]) #Usa una expresión regular para identificar las palabras que finalicen con "_ + una letra cualquiera" y lo reemplaza por nada, es decir, lo corta.
-            palabra = quitar_acentos(palabra)
-            puntaje = float(renglon[1])
-            #puntaje = re.sub(r'[\.]', '', renglon[1])
-            diccionario_afectos[palabra] = float(puntaje) #int(puntaje) #Genera un diccionario cuya clave es una palabra normalizada y su valor representa el "score" de dicha palabra.
+            palabra = sbEsp.stem(palabra) #Normaliza la palabra
+            diccionario_afectos[palabra] = float(renglon[1]) #int(puntaje) #Genera un diccionario cuya clave es una palabra normalizada y su valor representa el "score" de dicha palabra.
 
     return diccionario_afectos
 
@@ -67,8 +67,7 @@ def cargar_STOP_WORDS():
         STOP_WORDS = []
         file = open(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt', 'r')
         for line in file.readlines():
-            line = quitar_acentos(line)
-            STOP_WORDS.append(line)
+            STOP_WORDS.append(sbEsp.stem(line)) #Guarda la palabra normalizada
         file.close()
         return STOP_WORDS
     except FileNotFoundError:

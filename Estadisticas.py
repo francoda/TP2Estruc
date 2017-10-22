@@ -3,6 +3,10 @@ import os
 import re
 import Persistencia
 from Modelos import *
+from nltk.stem.snowball import SnowballStemmer
+
+sbEsp = SnowballStemmer('spanish')
+LONGITUD_MINIMA = 3
 
 def leer_tweets():
     STOP_WORDS = Persistencia.cargar_STOP_WORDS()
@@ -15,14 +19,14 @@ def leer_tweets():
                 texto = limpiar_texto(tweet['Texto'])
                 palabras = re.split(r'[\s]+', texto)
                 for p in palabras:
-                    if len(p) >= 3 and p not in STOP_WORDS:
-                        if p not in apariciones_palabras[candidato].keys():
-                            apariciones_palabras[candidato][p] = 1
-                        else:
-                            apariciones_palabras[candidato][p] += 1
+                    if len(p) >= LONGITUD_MINIMA:
+                        p = sbEsp.stem(p)
+                        if p not in STOP_WORDS:
+                            if p not in apariciones_palabras[candidato].keys():
+                                apariciones_palabras[candidato][p] = 1
+                            else:
+                                apariciones_palabras[candidato][p] += 1
             file.close()
-            #print(candidato + ':')
-            #print(apariciones_palabras[candidato])
         except FileNotFoundError:
             apariciones_palabras[candidato] = {}
     return apariciones_palabras
@@ -32,7 +36,7 @@ def limpiar_texto(texto):
     texto = re.sub(r'[^a-z@áéíóú\s]', '', texto) #Borro caracteres especiales
     texto = re.sub(r'\B@[\S]+', 'USER', texto) #Borro usuarios
     #Saco acentos
-    texto = Persistencia.quitar_acentos(texto)
+    texto = quitar_acentos(texto)
     texto = re.sub(r'[\S]*(http)[\S]+', 'URL', texto) #Borro links (si están pegados a una palabra a su izquierda también)
     texto = re.sub(r'[\S]+@[\S]+', 'URL', texto) #Borro emails
     return texto
@@ -48,7 +52,10 @@ def puntuar_tweets(apariciones_palabras = {}):
             if palabra in diccionario_afectos.keys():
                 puntaje_candidato += diccionario_afectos[palabra]*cantidad
                 cantidad_palabras_puntaje += cantidad
-        diccionario_puntajes[candidato] = puntaje_candidato/cantidad_palabras_puntaje
+        if cantidad_palabras_puntaje > 0:
+            diccionario_puntajes[candidato] = puntaje_candidato/cantidad_palabras_puntaje
+        else:
+            diccionario_puntajes[candidato] = 0
     return diccionario_puntajes
 
 def quitar_acentos(texto):
