@@ -1,4 +1,4 @@
-import os, time, operator
+import time
 import Estadisticas
 from Colector import *
 from Modelos import *
@@ -12,14 +12,26 @@ class Menu():
                                                    '1 - Estadísticas \n'
                                                    '2 - Búsqueda Única \n'
                                                    '3 - Búsqueda Automática \n'
-                                                   '0 - Salir \n', True)
+                                                   '0 - Salir \n')
             if self.opcion_menu == Menu_Principal.ESTADISTICAS:
-                print('Los datos se están procesando, aguarde por favor...')
-                dicc = Estadisticas.puntuar_tweets()
-                print('Estadísticas:')
-                for candidato, puntaje in sorted(dicc.items(), key=operator.itemgetter(1), reverse=True):
-                    print('%.2f' % puntaje, '-', candidatos_nombre_apellido[candidato])
-                input('Precione Enter para volver al menú...')
+                self.limpiar()
+                self.opcion_estadistica = self.leer_entero('Estadísticas: \n'
+                                                   '1 - Cantidad \n'
+                                                   '2 - Promedio \n'
+                                                   '0 - Salir \n')
+                if self.opcion_estadistica != Menu_TipoEstadistica.SALIR:
+                    print('Los datos se están procesando, aguarde por favor...')
+                if self.opcion_estadistica == Menu_TipoEstadistica.CANTIDAD:
+                    max_len = 0
+                    for candidato, cantidad in Estadisticas.cantidad_tweets():
+                        if max_len == 0:
+                            max_len = len(str(cantidad))
+                        print(str(cantidad).rjust(max_len), '-', candidatos_nombre_apellido[candidato])
+                elif self.opcion_estadistica == Menu_TipoEstadistica.PROMEDIO:
+                    for candidato, puntaje in Estadisticas.puntuar_tweets():
+                        print('%.2f' % puntaje, '-', candidatos_nombre_apellido[candidato])
+                if self.opcion_estadistica != Menu_TipoEstadistica.SALIR:
+                    input('Precione Enter para volver al menú...')
             elif self.opcion_menu == Menu_Principal.SALIR:
                 break
             else:
@@ -39,22 +51,18 @@ class Menu():
     def limpiar(self):
         os.system('cls' if os.name=='nt' else 'clear')
 
-    def leer_entero(self, texto, tomar_valores=False):
-        valor = ''
-        while valor == '':
+    def leer_entero(self, texto):
+        valor = None
+        while valor == None:
             try:
                 valor = int(input(texto))
-                if tomar_valores:
-                    valores = [int(s) for s in texto.split() if s.isdigit()]
-                    if valor in valores:
-                        return valor
-                    else:
-                        raise IndexError
-                else:
+                if valor in [int(s) for s in texto.split() if s.isdigit()]:
                     return valor
+                else:
+                    raise IndexError
             except:
                 print('Por favor, ingrese un número correspondiente al menú:' + str([int(s) for s in texto.split() if s.isdigit()]))
-            valor = ''
+            valor = None
 
 if __name__ == '__main__':
     Menu()

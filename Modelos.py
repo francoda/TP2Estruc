@@ -27,3 +27,9 @@ class Menu_Principal(IntEnum):
     BUSQUEDA_UNICA = 2
     BUSQUEDA_AUTOMATICA = 3
 
+class Menu_TipoEstadistica(IntEnum):
+    SALIR = 0
+    CANTIDAD = 1
+    PROMEDIO = 2
+
+

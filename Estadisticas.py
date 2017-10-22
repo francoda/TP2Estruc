@@ -6,10 +6,16 @@ from nltk.stem.snowball import SnowballStemmer
 sbEsp = SnowballStemmer('spanish')
 LONGITUD_MINIMA = 3
 
+def cantidad_tweets():
+    listaCantidad = []
+    for candidato, tweets in Persistencia.cargar().items():
+        listaCantidad.append((candidato, len(tweets)))
+    return sorted(listaCantidad, key=lambda tup: tup[1], reverse=True)
+
 def puntuar_tweets():
     apariciones_palabras = leer_tweets()
     diccionario_afectos = Persistencia.generar_diccionario_afectos()
-    diccionario_puntajes = {}
+    diccionario_puntajes = []
 
     for candidato, palabras in apariciones_palabras.items(): #Para cada candidato y cada palabra asociada al mismo
         puntaje_candidato = 0
@@ -19,10 +25,10 @@ def puntuar_tweets():
                 puntaje_candidato += diccionario_afectos[palabra]*cantidad
                 cantidad_palabras_puntaje += cantidad
         if cantidad_palabras_puntaje > 0:
-            diccionario_puntajes[candidato] = puntaje_candidato/cantidad_palabras_puntaje
+            diccionario_puntajes.append((candidato,puntaje_candidato/cantidad_palabras_puntaje))
         else:
-            diccionario_puntajes[candidato] = 0
-    return diccionario_puntajes
+            diccionario_puntajes.append((candidato, 0))
+    return sorted(diccionario_puntajes, key=lambda tup: tup[1], reverse=True)
 
 def leer_tweets():
     STOP_WORDS = Persistencia.cargar_STOP_WORDS()

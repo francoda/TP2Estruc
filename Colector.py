@@ -1,5 +1,10 @@
 import Persistencia
+import os
 from Modelos import *
+
+while not os.path.isfile(os.getcwd() + '\\Documentacion\\config.py'):
+    input('Por favor, coloque el archivo "config.py" dentro de la carpeta Documentacion.\n'
+          'Precione Enter cuando este listo...')
 from Documentacion.config import *
 
 class Colector():
@@ -51,12 +56,12 @@ class Colector():
                 yield Colector.getResumen(diccContador)
             except (TwitterError, TimeoutError) as ex:
                 if not limite_alcanzado:#Evito que se muestre mas de una vez
-                    yield 'Error de conexión' if ex is TimeoutError else 'Limite excedido'
+                    yield Colector.getResumen(diccContador) + '\nError de conexión' if ex is TimeoutError else '\nLimite excedido'
                     limite_alcanzado = not limite_alcanzado
             except (KeyboardInterrupt):
                 break
             except:
-                yield 'Error inesperado'
+                yield Colector.getResumen(diccContador) + '\nError inesperado'
         resumen = Colector.getResumen(diccContador)
         yield resumen
         resumen += Colector.ids()

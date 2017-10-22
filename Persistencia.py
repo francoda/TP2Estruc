@@ -48,6 +48,9 @@ def guardarBusquedaLog(resumen):
 
 def generar_diccionario_afectos():
     diccionario_afectos = {}
+    while not os.path.isfile(os.getcwd() + '\\Documentacion\\Diccionario_Afectos.csv'):
+        input('Por favor, coloque el archivo "Diccionario_Afectos.csv" dentro de la carpeta Documentacion.\n'
+              'Precione Enter cuando este listo...')
     file = open('Documentacion\\Diccionario_Afectos.csv', 'r')
     reader = csv.reader(file, delimiter=';')
 
@@ -62,6 +65,9 @@ def generar_diccionario_afectos():
 def cargar_STOP_WORDS():
     try:
         STOP_WORDS = []
+        while not os.path.isfile(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt'):
+            input('Por favor, coloque el archivo "STOP_WORDS.txt" dentro de la carpeta Documentacion.\n'
+                  'Precione Enter cuando este listo...')
         file = open(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt', 'r')
         for line in file.readlines():
             STOP_WORDS.append(sbEsp.stem(line)) #Guarda la palabra normalizada
