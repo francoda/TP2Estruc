@@ -30,6 +30,13 @@ def guardar(dicc):
         json.dump(lista, file)
         file.close()
 
+def eliminarBase():
+    for root, dirs, files in os.walk(os.getcwd() + '\\Base\\', topdown=False):
+        for name in files:
+            os.remove(os.path.join(root, name))
+        for name in dirs:
+            os.rmdir(os.path.join(root, name))
+
 def cargarBusquedaLog():
     try:
         last_id = 0

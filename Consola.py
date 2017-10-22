@@ -12,6 +12,7 @@ class Menu():
                                                    '1 - Estadísticas \n'
                                                    '2 - Búsqueda Única \n'
                                                    '3 - Búsqueda Automática \n'
+                                                   '4 - Eliminar Tweets almacenados \n'
                                                    '0 - Salir \n')
             if opcion_menu == Menu_Principal.ESTADISTICAS:
                 self.limpiar()
@@ -38,6 +39,8 @@ class Menu():
                     input('Presione Enter para volver al menú...')
             elif opcion_menu == Menu_Principal.SALIR:
                 break
+            elif opcion_menu == Menu_Principal.RESET_BASE:
+                Persistencia.eliminarBase()
             else:
                 while True:
                     try:

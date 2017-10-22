@@ -26,6 +26,7 @@ class Menu_Principal(IntEnum):
     ESTADISTICAS = 1
     BUSQUEDA_UNICA = 2
     BUSQUEDA_AUTOMATICA = 3
+    RESET_BASE = 4
 
 class Menu_TipoEstadistica(IntEnum):
     SALIR = 0
