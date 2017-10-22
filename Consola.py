@@ -1,4 +1,4 @@
-import os, time
+import os, time, operator
 import Estadisticas
 from Colector import *
 from Modelos import *
@@ -17,8 +17,8 @@ class Menu():
                 print('Los datos se están procesando, aguarde por favor...')
                 dicc = Estadisticas.puntuar_tweets()
                 print('Estadísticas:')
-                for candidato, puntaje in dicc.items():
-                    print(candidato, ': ', '%.2f' % puntaje)
+                for candidato, puntaje in sorted(dicc.items(), key=operator.itemgetter(1), reverse=True):
+                    print('%.2f' % puntaje, '-', candidatos_nombre_apellido[candidato])
                 input('Precione Enter para volver al menú...')
             elif self.opcion_menu == Menu_Principal.SALIR:
                 break
