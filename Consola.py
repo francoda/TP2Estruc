@@ -1,13 +1,11 @@
 from Documentacion.config import *
 from Modelos import *
-import threading, os
+import os, time
 import Persistencia
 import Estadisticas
 from enum import IntEnum
 
 class Menu():
-
-    opcion_menu = 0
 
     def __init__(self):
         while True:
@@ -31,11 +29,16 @@ class Menu():
                 self.tw = Twitter(auth=OAuth(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET))#Inicializo twitter con las credenciales
                 self.dicc = Persistencia.cargar()#Cargo los tweets previamente guardamos
                 self.last_id, self.fist_id = Persistencia.cargarEstadisticas()#Cargo ids para luego utlizar
-                self.Buscar()
-                if self.opcion_menu == Menu_Principal.BUSQUEDA_AUTOMATICA:
-                    break
-                else:
-                    input('Precione Enter para volver al menú...')
+                while True:
+                    try:
+                        self.Buscar()
+                        if self.opcion_menu == Menu_Principal.BUSQUEDA_UNICA:
+                            input('Precione Enter para volver al menú...')
+                            break
+                        else:
+                            time.sleep(15)
+                    except (KeyboardInterrupt):
+                        break
 
     def Buscar(self):
         limite_alcanzado = False
@@ -82,11 +85,14 @@ class Menu():
         resumen = self.resumen(diccContador)
         print(resumen)
         resumen += self.ids()
-        Persistencia.guardarEstadisticas(resumen)
-        Persistencia.guardar(self.dicc)
+        while True:
+            try:
+                Persistencia.guardarEstadisticas(resumen)
+                Persistencia.guardar(self.dicc)
+                break
+            except (KeyboardInterrupt):
+                print('Aguarde, guardando progreso.')
         print('Proceso Guardado')
-        if self.opcion_menu == Menu_Principal.BUSQUEDA_AUTOMATICA:
-            threading.Timer(15, self.Buscar).start() #Busca cada 15 segundos
 
     def limpiar(self):
         os.system('cls' if os.name=='nt' else 'clear')
