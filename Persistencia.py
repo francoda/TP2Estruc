@@ -6,6 +6,8 @@ sbEsp = SnowballStemmer('spanish')
 
 def cargar():
     dicc = {e.value:{} for e in Candidato}
+    if not os.path.exists(os.getcwd() + '\\Base\\'):
+        os.makedirs(os.getcwd() + '\\Base\\')
     for candidato in [e.value for e in Candidato]:
         try:
             file = open(os.getcwd() + '\\Base\\' + str(candidato).replace('@', '').lower() + '.j', 'r')
@@ -18,6 +20,8 @@ def cargar():
     return dicc
 
 def guardar(dicc):
+    if not os.path.exists(os.getcwd() + '\\Base\\'):
+        os.makedirs(os.getcwd() + '\\Base\\')
     for candidato, tweets in dicc.items():
         file = open(os.getcwd() + '\\Base\\' + str(candidato).replace('@', '').lower() + '.j', 'w')
         lista = []
@@ -30,6 +34,8 @@ def cargarBusquedaLog():
     try:
         last_id = 0
         fist_id = 0
+        if not os.path.exists(os.getcwd() + '\\Base\\'):
+            os.makedirs(os.getcwd() + '\\Base\\')
         file = open(os.getcwd() + '\\Base\\UltimaBusquedaLog.txt', 'r')
         for line in file.readlines():
             if 'last_id' in line:
@@ -42,6 +48,8 @@ def cargarBusquedaLog():
         return 0, 0
 
 def guardarBusquedaLog(resumen):
+    if not os.path.exists(os.getcwd() + '\\Base\\'):
+        os.makedirs(os.getcwd() + '\\Base\\')
     file = open(os.getcwd() + '\\Base\\UltimaBusquedaLog.txt', 'w')
     file.writelines(resumen)
     file.close()
