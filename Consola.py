@@ -23,13 +23,17 @@ class Menu():
                     print('Los datos se están procesando, aguarde por favor...')
                 if opcion_estadistica == Menu_TipoEstadistica.CANTIDAD:
                     max_len = 0
+                    enumerador_cantidades = 1
                     for candidato, cantidad in Estadisticas.cantidad_tweets():
                         if max_len == 0:
                             max_len = len(str(cantidad))
-                        print(str(cantidad).rjust(max_len), '-', candidatos_nombre_apellido[candidato])
+                        print(str(enumerador_cantidades)+'°)', str(cantidad).rjust(max_len), '-', candidatos_nombre_apellido[candidato])
+                        enumerador_cantidades += 1
                 elif opcion_estadistica == Menu_TipoEstadistica.PROMEDIO:
+                    enumerador_afectos = 1
                     for candidato, puntaje in Estadisticas.puntuar_tweets():
-                        print('%.2f' % puntaje, '-', candidatos_nombre_apellido[candidato])
+                        print(str(enumerador_afectos)+'°)','%.4f' % puntaje, '-', candidatos_nombre_apellido[candidato])
+                        enumerador_afectos += 1
                 if opcion_estadistica != Menu_TipoEstadistica.SALIR:
                     input('Presione Enter para volver al menú...')
             elif opcion_menu == Menu_Principal.SALIR:
