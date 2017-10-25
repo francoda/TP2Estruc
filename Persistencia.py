@@ -83,8 +83,10 @@ def cargar_STOP_WORDS():
         while not os.path.isfile(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt'):
             input('Por favor, coloque el archivo "STOP_WORDS.txt" dentro de la carpeta Documentacion.\n'
                   'Presione Enter cuando esté listo...')
-        file = open(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt', 'r')
+        file = open(os.getcwd() + '\\Documentacion\\STOP_WORDS.txt', 'r', -1, 'utf-8')
+        file.readline()
         for line in file.readlines():
+            line = line.replace('\n','')
             STOP_WORDS.append(sbEsp.stem(line)) # Guarda la palabra normalizada
         file.close()
         return STOP_WORDS
